@@ -18,26 +18,38 @@ namespace Pong
         {
             this._texture = texture;
         }
-        public override void Update(GameTime gameTime, List<Sprite> sprites)
+        public void Update(GameTime gameTime, List<Sprite> paddles,List<Sprite> walls)
         {
 
             position += velocity;
-            foreach (var sprite in sprites)
+            foreach (var sprite in walls)
             {
-                if (sprite == this)
-                    continue;
                 if (this.CollidingTop(sprite) || this.CollidingBottom(sprite))
                 {
                     ballAngle = (float)Math.PI * 2 - ballAngle;
                     velocity.Y = (float)Math.Sin(ballAngle) * speed;
                     velocity.X = (float)Math.Cos(ballAngle) * speed;
                 }
+                if (this.CollidingRight(sprite) || this.CollidingLeft(sprite))
+                {
+                    position=new Vector2(390,230);
+                    speed = 5f;
+                }
+            }
+            foreach (var sprite in paddles)
+            {
                 if (this.CollidingLeft(sprite) || this.CollidingRight(sprite))
                 {
                     ballAngle += (float)Math.PI / 2;
                     velocity.Y = (float)Math.Sin(ballAngle) * speed;
                     velocity.X = (float)Math.Cos(ballAngle) * speed;
                     speed += 0.1f;
+                }
+                if (this.CollidingTop(sprite) || this.CollidingBottom(sprite))
+                {
+                    ballAngle = (float)Math.PI * 2 - ballAngle;
+                    velocity.Y = (float)Math.Sin(ballAngle) * speed;
+                    velocity.X = (float)Math.Cos(ballAngle) * speed;
                 }
             }
         }

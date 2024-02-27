@@ -10,7 +10,9 @@ namespace Pong
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private List<Sprite> _sprites;
+        private List<Sprite> _playerSprites;
+        private List<Sprite> _wallSprites;
+        private Ball _ball;
         private Texture2D _paddleTexture;
         private Texture2D _ballTexture;
         private Texture2D _rightleftTexture;
@@ -38,7 +40,7 @@ namespace Pong
             _ballTexture = Content.Load<Texture2D>("Sprites/Ball");
             _rightleftTexture = Content.Load<Texture2D>("Sprites/rightleft");
             _topbottomTexture = Content.Load<Texture2D>("Sprites/topbottom");
-            _sprites = new List<Sprite>()
+            _playerSprites = new List<Sprite>()
             {
                 new Player(_paddleTexture)
                 {
@@ -65,15 +67,10 @@ namespace Pong
                     position = new Vector2(700,50),
                     color=Color.Blue,
                     speed=5f,
-                },
-                new Ball(_ballTexture)
-                {
-                    position=new Vector2(390,230),
-                    speed=5f,
-                    color=Color.White,
-                    ballAngle=1f,
-                    velocity=new Vector2(2,2),
-                },
+                }
+            };
+            _wallSprites = new List<Sprite>()
+            {
                 new Sprite(_topbottomTexture)
                 {
                     position=new Vector2(0,0),
@@ -84,16 +81,24 @@ namespace Pong
                     position=new Vector2(0,460),
                     color=Color.White,
                 },
-                new Sprite(_rightleftTexture)
+                new PointColliders(_rightleftTexture)
                 {
                     position=new Vector2(0,0),
                     color=Color.White,
                 },
-                new Sprite(_rightleftTexture)
+                new PointColliders(_rightleftTexture)
                 {
                     position=new Vector2(780,0),
                     color=Color.White,
                 }
+            };
+            _ball = new Ball(_ballTexture)
+            {
+                position = new Vector2(390, 230),
+                speed = 5f,
+                color = Color.White,
+                ballAngle = 1f,
+                velocity = new Vector2(2, 2),
             };
         }
 
@@ -103,10 +108,11 @@ namespace Pong
                 Exit();
 
             // TODO: Add your update logic here
-            foreach (var sprite in _sprites)
+            foreach (var sprite in _playerSprites)
             {
-                sprite.Update(gameTime, _sprites);
+                sprite.Update(gameTime, _playerSprites);
             }
+            _ball.Update(gameTime, _playerSprites, _wallSprites);
             base.Update(gameTime);
         }
 
@@ -116,10 +122,15 @@ namespace Pong
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            foreach(var sprite in _sprites)
+            foreach(var sprite in _playerSprites)
             {
                 sprite.Draw(_spriteBatch);
             }
+            foreach (var sprite in _wallSprites)
+            {
+                sprite.Draw(_spriteBatch);
+            }
+            _ball.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
