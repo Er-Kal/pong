@@ -17,6 +17,8 @@ namespace Pong
         private Texture2D _ballTexture;
         private Texture2D _rightleftTexture;
         private Texture2D _topbottomTexture;
+        private int[] scores = new int[2];
+        private SpriteFont _font;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -40,16 +42,15 @@ namespace Pong
             _ballTexture = Content.Load<Texture2D>("Sprites/Ball");
             _rightleftTexture = Content.Load<Texture2D>("Sprites/rightleft");
             _topbottomTexture = Content.Load<Texture2D>("Sprites/topbottom");
+            _font = Content.Load<SpriteFont>("Fonts/Score");
             _playerSprites = new List<Sprite>()
             {
                 new Player(_paddleTexture)
                 {
                     Input = new Input()
                     {
-                        Up=Keys.Up,
-                        Down = Keys.Down,
-                        Right=Keys.Right,
-                        Left=Keys.Left,
+                        Up=Keys.W,
+                        Down = Keys.S,
                     },
                     position = new Vector2(50,50),
                     color=Color.White,
@@ -59,10 +60,8 @@ namespace Pong
                 {
                     Input = new Input()
                     {
-                        Up=Keys.W,
-                        Down = Keys.S,
-                        Right=Keys.D,
-                        Left=Keys.A,
+                        Up=Keys.Up,
+                        Down = Keys.Down,
                     },
                     position = new Vector2(700,50),
                     color=Color.Blue,
@@ -110,9 +109,9 @@ namespace Pong
             // TODO: Add your update logic here
             foreach (var sprite in _playerSprites)
             {
-                sprite.Update(gameTime, _playerSprites);
+                sprite.Update(gameTime, _wallSprites);
             }
-            _ball.Update(gameTime, _playerSprites, _wallSprites);
+            _ball.Update(gameTime, _playerSprites, _wallSprites,scores);
             base.Update(gameTime);
         }
 
@@ -130,6 +129,7 @@ namespace Pong
             {
                 sprite.Draw(_spriteBatch);
             }
+            _spriteBatch.DrawString(_font, scores[0] + " : " + scores[1], new Vector2(350, 50), Color.White);
             _ball.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);

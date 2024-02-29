@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Fonts/File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/File.spritefont;Fonts/Score.spritefont
+
 #begin Sprites/20x20ball.png
 /importer:TextureImporter
 /processor:TextureProcessor
