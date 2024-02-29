@@ -53,7 +53,7 @@ namespace Pong
                         Down = Keys.S,
                     },
                     position = new Vector2(50,50),
-                    color=Color.White,
+                    color=Color.Red,
                     speed=5f,
                 },
                 new Player(_paddleTexture)
